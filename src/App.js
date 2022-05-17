@@ -1,11 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div>
-      
+    <div className="category-container">
+      <div className="category-container">
+        {/* <img></img> */}
+        
+        <div className="category-body-container">
+          <h2>Hats</h2>
+          <p>Shop now</p>
+        </div>
+      </div>
+      <div className="category-container">
+        {/* <img></img> */}
+        
+        <div className="category-body-container">
+          <h2>Jackets</h2>
+          <p>Shop now</p>
+        </div>
+      </div>
+      <div className="category-container">
+        {/* <img></img> */}
+        
+        <div className="category-body-container">
+          <h2>Sneakers</h2>
+          <p>Shop now</p>
+        </div>
+      </div>
+      <div className="category-container">
+        {/* <img></img> */}
+        
+        <div className="category-body-container">
+          <h2>Womens</h2>
+          <p>Shop now</p>
+        </div>
+      </div>
+      <div className="category-container">
+        {/* <img></img> */}
+        
+        <div className="category-body-container">
+          <h2>Mens</h2>
+          <p>Shop now</p>
+        </div>
+      </div>
     </div>
+    
   );
 }
 
