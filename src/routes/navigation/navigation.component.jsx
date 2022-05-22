@@ -1,16 +1,17 @@
 import { useContext } from "react";
 import { Outlet, Link } from "react-router-dom";
-
-import { ReactComponent as CrwnLogo } from '../../assets/crown.svg'
+import CartIcon from "../../components/cart-icon/cart-icon.component";
+import CartDropdown from "../../components/cart-dropdowm/cart-dropdrown.component";
 import { UserContext } from "../../contexts/user.context";
-
-import {signOutUser} from '../../utils/firebase/firebase.utills'
+import { CartContext } from "../../contexts/cart.context";
+import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
+import { signOutUser } from '../../utils/firebase/firebase.utills';
 
 import './navigation.styles.scss'
 
 const Navigation = () => {
     const { currentUser } = useContext(UserContext);
-    // console.log(currentUser);
+    const { isCartOpen } = useContext(CartContext);
 
     return (
         <>
@@ -31,7 +32,9 @@ const Navigation = () => {
                                 SIGN IN
                             </Link>
                     )}
+                    <CartIcon />
                 </div>
+                {isCartOpen && <CartDropdown />}
             </div>
             <Outlet />  {/* component that represents the page hone*/} 
         </>
