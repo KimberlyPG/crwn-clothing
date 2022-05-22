@@ -5,7 +5,9 @@ import {
     signInWithPopup,
     GoogleAuthProvider, 
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
 } from 'firebase/auth';
 
 // Import methods from firestore
@@ -30,7 +32,7 @@ const firebaseConfig = {
   // Initialize Firebase
   const firebaseApp = initializeApp(firebaseConfig);
 
-//  Iniialize a provider 
+//  Initialize a provider 
   const provider = new GoogleAuthProvider(); //GoogleAuthProvider is a class that we get from firebase authentication
   provider.setCustomParameters({
     prompt: "select_account"
@@ -49,9 +51,8 @@ const firebaseConfig = {
     additionalInformation = {}
     ) => {
     if(!userAuth) return; //protecting code
-
+ 
     const userDocRef = doc(db, 'user', userAuth.uid); //doc parameters are db, collection, identifier
-    console.log(userDocRef);
 
     // check whether or not there's an intance of it that exists inside o a database
     const userSnapshot = await getDoc(userDocRef);
@@ -59,14 +60,15 @@ const firebaseConfig = {
     // if user data does not exists
     if(!userSnapshot.exists()){
         const { displayName, email } = userAuth;
+        // const useremail = userAuth.email
         const createdAt = new Date();
 
         try {
             await setDoc(userDocRef, { //setdoc to the db
+                ...additionalInformation,
                 displayName,
                 email,
                 createdAt,
-                ...additionalInformation,
             });
         }catch (error){
             console.log('error creating user', error.message);
@@ -89,3 +91,13 @@ const firebaseConfig = {
 
     return signInWithEmailAndPassword(auth, email, password);
   };
+
+  // sign out function 
+  export const signOutUser = async () => await signOut(auth);
+
+  // Function to catch when a user signs in or signs out
+  export const onAuthStateChangedListener = (callback) => {
+    onAuthStateChanged(auth, callback) //when a user sign in this listener register the new user and the callback run and console log the user instance
+  }
+  
+  
