@@ -3,8 +3,9 @@ import { createContext, useState } from "react";
 import PRODUCTS from '../shopdata.json'
 
 export const ProductsContext = createContext ({
-    products: [],
+    products: []
 });
+
 
 export const ProductsProvider = ( {children} ) => {
     const [products, setProducts] = useState(PRODUCTS);
