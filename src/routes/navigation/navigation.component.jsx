@@ -36,7 +36,7 @@ const Navigation = () => {
                 </NavLinks>
                 {isCartOpen && <CartDropdown />}
             </NavigationContainer>
-            <Outlet />  {/* component that represents the page hone*/} 
+            <Outlet />  {/* component that represents the page home*/} 
         </>
     )
   }
