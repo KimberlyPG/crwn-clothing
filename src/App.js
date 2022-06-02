@@ -18,7 +18,7 @@ const App = () => {
   // Centralize the sign in and sign out into this callback
   useEffect(() => {
     const unsubcribe = onAuthStateChangedListener((user) => {
-        // console.log("userlistener", user);
+        console.log("userlistener", user);
         if(user) {
             createUserDocumentFromAuth(user);
         }
