@@ -129,7 +129,18 @@ const firebaseConfig = {
 
   // Function to catch when a user signs in or signs out
   export const onAuthStateChangedListener = (callback) => {
-    onAuthStateChanged(auth, callback) //when a user sign in this listener register the new user and the callback run and console log the user instance
+    onAuthStateChanged(auth, callback); //when a user sign in this listener register the new user and the callback run and console log the user instance
   }
   
-  
+  export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(
+        auth,
+        (userAuth) => {
+          unsubscribe();
+          resolve(userAuth);
+        },
+        reject
+      );
+    });
+  };

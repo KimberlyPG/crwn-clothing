@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { Routes, Route} from "react-router-dom";
 import { 
     onAuthStateChangedListener,
-    createUserDocumentFromAuth 
+    createUserDocumentFromAuth, 
+    getCurrentUser
 } from "./utils/firebase/firebase.utills";
 import Navigation from "./routes/navigation/navigation.component";
 import Home from "./routes/home/home.component";
@@ -17,15 +18,7 @@ const App = () => {
 
   // Centralize the sign in and sign out into this callback
   useEffect(() => {
-    const unsubcribe = onAuthStateChangedListener((user) => {
-        console.log("userlistener", user);
-        if(user) {
-            createUserDocumentFromAuth(user);
-        }
-        dispatch(setCurrentUser(user)); //if user sign in we store the object, if user sign out we store null
-    });
-    
-    return unsubcribe
+   getCurrentUser().then((user) => console.log(user));
   }, []);
 
   return (
