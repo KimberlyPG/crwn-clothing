@@ -108,7 +108,7 @@ const firebaseConfig = {
     }
 
     // if user data exists
-    return userDocRef;
+    return userSnapshot;
   };
 
   // Create user with email

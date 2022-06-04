@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger';
 import createSagaMiddeware from 'redux-saga';
 import { rootReducer } from './root-reducer';
+// import { rootSaga } from './root-saga';
 import { rootSaga } from './root-saga';
 
 // Redux-Persist
