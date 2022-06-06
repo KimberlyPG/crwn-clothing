@@ -8,6 +8,8 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
+    NextOrObserver,
+    User
 } from 'firebase/auth';
 
 // Import methods from firestore
@@ -20,8 +22,12 @@ import {
     collection,
     writeBatch,
     query,
-    getDocs
+    getDocs,
+    QueryDocumentSnapshot,
+    DocumentReference
 } from 'firebase/firestore'
+
+import { Category } from '../../store/categories/category.types';
 
 // Web app's Firebase configuration
 const firebaseConfig = {
@@ -55,8 +61,15 @@ const firebaseConfig = {
   //  Instance to get or set data to our document 
   export const db = getFirestore();
 
+  export type objectToAdd = {
+    title: string;
+  }
+
   // Add collection and documents to firestore
-  export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  export const addCollectionAndDocuments = async <T extends objectToAdd> (
+    collectionKey: string, 
+    objectsToAdd: T[]
+    ): Promise<void> => {
     const collectionRef = collection(db, collectionKey);
     const batch = writeBatch(db); //batch instance
 
@@ -69,19 +82,30 @@ const firebaseConfig = {
     console.log('done');
   }
 
+
   // get collection from firestore
-  export const getCategoriesAndDocuments = async () => {
+  export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data() as Category);
   };
 
+  export type AdditionalInformation = {
+    displayName?: string;
+  }
+
+  export type UserData = {
+    createAt: Date;
+    displayName: string;
+    email: string;
+  }
+
   export const createUserDocumentFromAuth = async (
-    userAuth,
-    additionalInformation = {}
-    ) => {
+    userAuth: User,
+    additionalInformation = {} as AdditionalInformation
+    ): Promise<void |DocumentReference<UserData>> => {
     if(!userAuth) return; //protecting code
  
     const userDocRef = doc(db, 'user', userAuth.uid); //doc parameters are db, collection, identifier
@@ -103,22 +127,22 @@ const firebaseConfig = {
                 createdAt,
             });
         }catch (error){
-            console.log('error creating user', error.message);
+            console.log('error creating user', error);
         }
     }
 
     // if user data exists
-    return userDocRef;
+    return userDocRef as DocumentReference<UserData>;
   };
 
   // Create user with email
-  export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  export const createAuthUserWithEmailAndPassword = async (email: string, password: string) => {
     if(!email || !password) return;
 
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  export const signAuthInWithEmailAndPassword = async (email, password) => {
+  export const signAuthInWithEmailAndPassword = async (email: string, password: string) => {
     if(!email || !password) return;
 
     return signInWithEmailAndPassword(auth, email, password);
@@ -128,7 +152,7 @@ const firebaseConfig = {
   export const signOutUser = async () => await signOut(auth);
 
   // Function to catch when a user signs in or signs out
-  export const onAuthStateChangedListener = (callback) => {
+  export const onAuthStateChangedListener = (callback: NextOrObserver<User>) => {
     onAuthStateChanged(auth, callback) //when a user sign in this listener register the new user and the callback run and console log the user instance
   }
   

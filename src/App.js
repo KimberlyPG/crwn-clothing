@@ -16,9 +16,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   // Centralize the sign in and sign out into this callback
+  // 207 - min:12
   useEffect(() => {
     const unsubcribe = onAuthStateChangedListener((user) => {
-        console.log("userlistener", user);
         if(user) {
             createUserDocumentFromAuth(user);
         }
@@ -27,6 +27,16 @@ const App = () => {
     
     return unsubcribe
   }, []);
+  // useEffect(() => {
+  //   const unsubcribe = onAuthStateChangedListener((user): Promise<User | null> => {
+  //       if(user) {
+  //           createUserDocumentFromAuth(user);
+  //       }
+  //       dispatch(setCurrentUser(user)); //if user sign in we store the object, if user sign out we store null
+  //   });
+    
+  //   return unsubcribe
+  // }, []);
 
   return (
     <Routes>
