@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
@@ -28,14 +28,14 @@ const SignInForm = () => {
         await signInWithGooglePopup();
       };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         try {
             await signAuthInWithEmailAndPassword(email, password);
             resetFormFields();
         }catch(error){
-            switch(error.code){
+            switch(error){
                 case 'auth/wrong-password':
                     alert('incorrect password or email')
                     break
@@ -49,7 +49,7 @@ const SignInForm = () => {
     };
     
     // function that takes the input event whenever the text changes
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target; //event.target give us the input
         // ... spread all the fields 
         setFormFields({...formFields, [name]: value });

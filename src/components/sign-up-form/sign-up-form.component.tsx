@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, FormEvent, ChangeEvent } from "react";
+import { AuthError, AuthErrorCodes } from "firebase/auth";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 
@@ -27,7 +27,7 @@ const SignUpForm = () => {
         setFormFields(defaultFormFields);
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         if(password !== confirmPassword) {
@@ -36,15 +36,16 @@ const SignUpForm = () => {
         }
 
         try {
-            const { user } = await createAuthUserWithEmailAndPassword(
+            const usuario  = await createAuthUserWithEmailAndPassword(
                 email, 
                 password
             );
-
-        await createUserDocumentFromAuth(user, {displayName});
+        const userAuth = usuario?.user;
+  
+        await createUserDocumentFromAuth(userAuth!, {displayName});
         resetFormFields();
         }catch(error){
-            if(error.code === 'auth/email-already-in-use') {
+            if((error as AuthError).code === AuthErrorCodes.EMAIL_EXISTS) {
                 alert('Cannot create user, email already in use');
             }
             console.log('user creation encountered an error', error);
@@ -52,7 +53,7 @@ const SignUpForm = () => {
     };
     
     // function that takes the input event whenever the text changes
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target; //event.target give us the input
         
         // ... spread all the fields 
