@@ -11,12 +11,11 @@ import Authentication from "./routes/authentication/authentication.component"
 import Shop from "./routes/shop/shop.component";
 import Checkout from "./routes/checkout/checkout.component";
 import { setCurrentUser } from "./store/user/user.action";
+import { GlobalStyle } from "./global.styles";
 
 const App = () => {
   const dispatch = useDispatch();
 
-  // Centralize the sign in and sign out into this callback
-  // 207 - min:12
   useEffect(() => {
     const unsubcribe = onAuthStateChangedListener((user) => {
         if(user) {
@@ -27,26 +26,19 @@ const App = () => {
     
     return unsubcribe
   }, []);
-  // useEffect(() => {
-  //   const unsubcribe = onAuthStateChangedListener((user): Promise<User | null> => {
-  //       if(user) {
-  //           createUserDocumentFromAuth(user);
-  //       }
-  //       dispatch(setCurrentUser(user)); //if user sign in we store the object, if user sign out we store null
-  //   });
-    
-  //   return unsubcribe
-  // }, []);
 
   return (
-    <Routes>
-      <Route path='/' element={<Navigation />}>
-        <Route index element={<Home />} /> 
-        <Route path='shop/*' element={<Shop />} />
-        <Route path='auth' element={<Authentication />}/>
-        <Route path='checkout' element={<Checkout />} />
-      </Route>
-    </Routes>
+    <>
+    <GlobalStyle />
+      <Routes>
+        <Route path='/' element={<Navigation />}>
+          <Route index element={<Home />} /> 
+          <Route path='shop/*' element={<Shop />} />
+          <Route path='auth' element={<Authentication />}/>
+          <Route path='checkout' element={<Checkout />} />
+        </Route>
+      </Routes>
+    </>
   );  
 };
 
