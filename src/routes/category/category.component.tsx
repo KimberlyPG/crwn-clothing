@@ -27,8 +27,8 @@ const Category = () => {
                 <Spinner />
                 ) : (
                     <CategoryContainer>
-                        {products && //if products is undefined then don't render it
-                        products.map((product) => ( //only render products i products is a value
+                        {products &&
+                        products.map((product) => ( 
                             <ProductCard  key={product.id} product={product}/>
                         ))}
                     </CategoryContainer>

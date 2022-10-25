@@ -4,12 +4,10 @@ import { createAction, withMatcher, Action, ActionWithPayload } from "../../util
 
 
 const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartItem[] => {
-    //find if cartItems contains productToAdd
     const existingCartItem = cartItems.find(
         (cartItem) => cartItem.id === productToAdd.id
     );
 
-    // if found, increment quality
         if(existingCartItem) {
             return cartItems.map((cartItem) => 
                 cartItem.id === productToAdd.id 
@@ -18,22 +16,18 @@ const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartIte
             );
         }
 
-    // return new array with modified cartItems/ new cart item
     return [...cartItems, {...productToAdd, quantity: 1} ];
 }
 
 const removeCartItem = (cartItems: CartItem[], cartItemToRemove: CartItem): CartItem[] => {
-    // find the cart item to remove
     const existingCartItem = cartItems.find(
         (cartItem) => cartItem.id === cartItemToRemove.id
     );
 
-    // check if quantity is equal to 1, if it is remove item from the cart
     if(existingCartItem && existingCartItem.quantity === 1) {
         return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id);
     }
 
-    // return back cartitems with matching cart item with reduced quantity
     return cartItems.map((cartItem) => 
         cartItem.id === cartItemToRemove.id 
             ? {...cartItem, quantity: cartItem.quantity - 1}
@@ -42,7 +36,6 @@ const removeCartItem = (cartItems: CartItem[], cartItemToRemove: CartItem): Cart
 }
 
 const clearCartItem = (cartItems: CartItem[], cartItemToClear: CartItem): CartItem[] => {
-    // Remove item from checkout
         return cartItems.filter(cartItem => cartItem.id !==  cartItemToClear.id);
 };
 
